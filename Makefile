@@ -11,3 +11,7 @@ client:
 	
 executa_client:
 	cd cliente && ./cliente
+comita:
+	git add .
+	git cia "$(TXTCOMIT)"
+	git push origin master
