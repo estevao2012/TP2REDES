@@ -1,18 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
- 
-#define PORTNUM 2343
-#define MAXRCVLEN 500
+#include "../libs/mysocket.h"
+  
+
  
 int main(int argc, char *argv[])
 {
-    char msg[] = "Hello World !\n";
+    char boasvindas[] = "Bem vindo , por favor digite seu usuário!\n";
     char buffer[MAXRCVLEN + 1]; /* +1 so we can add null terminator */
     struct sockaddr_in dest; /* socket info about the machine connecting to us */
     struct sockaddr_in serv; /* socket info about our server */
@@ -31,18 +26,17 @@ int main(int argc, char *argv[])
     bind(mysocket, (struct sockaddr *)&serv, sizeof(struct sockaddr));
  
     /* start listening, allowing a queue of up to 1 pending connection */
-    listen(mysocket, 1);
+    listen(mysocket, 5);
     int consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
  
     while(consocket)
     {   
-        printf("Incoming connection from %s - sending welcome\n", inet_ntoa(dest.sin_addr));
+        // printf("Incoming connection from %s - sending welcome\n", inet_ntoa(dest.sin_addr));
         
-        // len = recv(consocket,buffer,MAXRCVLEN,0); 
-        
-        printf("Received %s (%d bytes).\n", buffer, len);
+        send(consocket, boasvindas, strlen(boasvindas), 0); 
 
-        send(consocket, msg, strlen(msg), 0); 
+        len = recv(consocket,buffer,MAXLOGIN,0); 
+        printf("%s conectou.\n", buffer);
 		close(consocket);
         consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
     }
