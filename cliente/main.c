@@ -4,7 +4,7 @@
 #include "../libs/mysocket.h"
  
 #define MAXRCVLEN 500
-#define PORTNUM 80
+#define PORTNUM 2343
 #define IP "127.0.0.1"
 
 int main(int argc, char *argv[])
@@ -31,23 +31,23 @@ int main(int argc, char *argv[])
     dest.sin_addr.s_addr = inet_addr(IP);     
     dest.sin_port = htons(port_recv);           
 
-    // if (connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr)) == -1) {
-    //     printf("ERRO ip: %s",ip);
-    //     printf(" port: %i\n",port_recv);
-    //     perror("connect()");
-    //     exit(1);
-    // }
+    if (connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr)) == -1) {
+        printf("ERRO ip: %s",ip);
+        printf(" port: %i\n",port_recv);
+        perror("connect()");
+        exit(1);
+    }
     
     // if (send(mysocket, msg, strlen(msg), 0) == -1){
     //     perror("send");
     //     exit(1);
     // }
 
-    // if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){
-    //     perror("recv()");
-    //     exit(1);
-    // }
-
+    if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){
+        perror("recv()");
+        exit(1);
+    }
+    printf("%s\n",resposta );
     resposta[numbytes] = '\0';
    
      
