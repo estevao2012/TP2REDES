@@ -1,16 +1,13 @@
-all: cliente server
+all: server client
 
-cliente:
-	gcc -c cliente/main.c
-	gcc cliente/main.o -o cliente
-	
-executa_cliente:
-	./cliente
-	
 server:
-	gcc -c servidor/main.c
-	gcc servidor/main.o -o servidor
-	
-executa_servidor:
-	./servidor
+	cd servidor && make
 
+executa_servidor:
+	cd servidor && ./servidor
+
+client:
+	cd cliente && make
+	
+executa_client:
+	cd cliente && ./cliente
