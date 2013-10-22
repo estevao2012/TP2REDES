@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in serv; /* socket info about our server */
     int mysocket;            /* socket used to listen for incoming connections */
     int len;
+    int consocket;
     socklen_t socksize = sizeof(struct sockaddr_in);
  
     memset(&serv, 0, sizeof(serv));           /* zero the struct before filling the fields */
@@ -21,24 +22,33 @@ int main(int argc, char *argv[])
     serv.sin_port = htons(PORTNUM);           /* set the server port number */    
  
     mysocket = socket(AF_INET, SOCK_STREAM, 0);
- 
-    /* bind serv information to mysocket */
+
     bind(mysocket, (struct sockaddr *)&serv, sizeof(struct sockaddr));
  
-    /* start listening, allowing a queue of up to 1 pending connection */
     listen(mysocket, 5);
-    int consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
  
-    while(consocket)
+    while(1) 
     {   
-        // printf("Incoming connection from %s - sending welcome\n", inet_ntoa(dest.sin_addr));
         
-        send(consocket, boasvindas, strlen(boasvindas), 0); 
-
-        len = recv(consocket,buffer,MAXLOGIN,0); 
-        printf("%s conectou.\n", buffer);
-		close(consocket);
         consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
+       
+        if( fork() == 0){
+            close(mysocket);
+            send(consocket, boasvindas, strlen(boasvindas), 0); 
+            len = recv(consocket,buffer,MAXLOGIN,0); 
+            printf("%s conectou.\n", buffer);
+
+            while(1){
+                len = recv(consocket,buffer,MAXRCVLEN,0); 
+                if(strcmp(buffer,"q") == 0 ) break;
+                printf("%s\n", buffer ); 
+            }
+            exit(0);
+        }else{ 
+            close(consocket); 
+        }
+        
+        // consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize);
     }
  
     close(mysocket);

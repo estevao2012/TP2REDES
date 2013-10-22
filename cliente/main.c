@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
 {
     //---------  Variaveis --------//
     char resposta[MAXRCVLEN + 1]; 
+    char mensagem[MAXRCVLEN + 1];
     char login[50];
     unsigned short port_recv;
     int indice_porta;
@@ -42,19 +43,30 @@ int main(int argc, char *argv[])
     resposta[numbytes] = '\0';
 
     scanf("%s",login);
-    printf("%s\n",login );
 
     if (send(mysocket, login, strlen(login), 0) == -1){
         perror("send");
         exit(1);
     }
     
-    // while(1){
-    //    if (send(mysocket, login, strlen(login), 0) == -1){
-    //         perror("send");
-    //         exit(1);
-    //     } 
+    // if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){
+    //     perror("recv()");
+    //     exit(1);
+    // }else{
+    //     printf("LALA\n");
     // }
+    // printf("%s\n",resposta);
+
+    while(1){
+        printf("Deseja enviar uma mensagem?\n");
+        scanf("%s", mensagem);
+        if( strcmp(mensagem,"q") == 0 ) break;
+        if (send(mysocket, mensagem, strlen(mensagem), 0) == -1){
+            perror("send");
+            exit(1);
+        } 
+        strcpy( mensagem, "" );
+    }
    
     close(mysocket);
     
