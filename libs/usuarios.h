@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "mysocket.h"
 
 typedef struct  {
       int socketId;
-      char* nome; 
+      char nome[MAXLOGIN]; 
 }usuario; 
 
-// usuario* inicializa_usuario(int socketId , char *nome);
+usuario allUsers[64];
+ 
+usuario* registra_user(int socketId , char nome[MAXLOGIN]);
 
 #include "usuarios.c"

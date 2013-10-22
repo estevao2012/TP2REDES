@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "../libs/mysocket.h"
 #include "../libs/usuarios.h"
   
@@ -8,11 +9,13 @@
  
 int main(int argc, char *argv[])
 {
-    char boasvindas[] = "Bem vindo , por favor digite seu usuário!\0";
-    char* login;
-    login = (char*)malloc( sizeof(char*)* MAXLOGIN);
+    char boasvindas[] = "Bem vindo , por favor digite seu usuário!";
+    char buffer[MAXRCVLEN + 1];
+    char login[MAXLOGIN + 1];
+    
+    int numUsersAtivos = 0;
 
-    char buffer[MAXRCVLEN + 1]; /* +1 so we can add null terminator */
+     
     struct sockaddr_in dest; /* socket info about the machine connecting to us */
     struct sockaddr_in serv; /* socket info about our server */
     int mysocket;            /* socket used to listen for incoming connections */
@@ -29,7 +32,7 @@ int main(int argc, char *argv[])
 
     bind(mysocket, (struct sockaddr *)&serv, sizeof(struct sockaddr));
  
-    listen(mysocket, 5);
+    listen(mysocket, 64);
  
     while(1) 
     {   
@@ -38,8 +41,8 @@ int main(int argc, char *argv[])
        
         if( fork() == 0){
             //Inicializa novo usuario
-            usuario* User = init_user();
-
+            usuario* User;
+            numUsersAtivos++;
             close(mysocket);
             send(consocket, boasvindas, strlen(boasvindas), 0); 
 
@@ -47,15 +50,16 @@ int main(int argc, char *argv[])
             printf("%s conectou.\n", login);
 
             User = registra_user( consocket , login );
-            while( 1 ){
+            while(1){
                 len = recv(consocket,buffer,MAXRCVLEN,0);  
                 buffer[len] = '\0';
                 if(len == 0) break; 
                 if(strcmp(buffer,"q") == 0) break;
+                printf("%d\n", numUsersAtivos );
                 printf("%s disse ", User->nome ); 
                 printf("%s\n", buffer ); 
             }
-
+            numUsersAtivos--;
             printf("saiu\n");
             exit(0);
         }else{ 
