@@ -46,15 +46,7 @@ int main(int argc, char *argv[])
     if (send(mysocket, login, strlen(login), 0) == -1){
         perror("send");
         exit(1);
-    }
-    
-    // if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){
-    //     perror("recv()");
-    //     exit(1);
-    // }else{
-    //     printf("LALA\n");
-    // }
-    // printf("%s\n",resposta);
+    } 
 
     while(1){
 

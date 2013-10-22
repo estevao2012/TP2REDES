@@ -1,4 +1,4 @@
 all:
-	gcc -c -lpthread main.c
-	gcc main.o -o servidor
+	gcc -c main.c
+	gcc main.o -lpthread -o servidor
 	
