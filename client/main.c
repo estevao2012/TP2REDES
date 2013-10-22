@@ -38,9 +38,8 @@ int main(int argc, char *argv[])
         perror("recv()");
         exit(1);
     }
-
-    printf("%s\n",resposta );
     resposta[numbytes] = '\0';
+    printf("%s\n",resposta );
 
     scanf("%s",login);
 
@@ -58,13 +57,14 @@ int main(int argc, char *argv[])
     // printf("%s\n",resposta);
 
     while(1){
+
         printf("Deseja enviar uma mensagem?\n");
         scanf("%s", mensagem);
-        if( strcmp(mensagem,"q") == 0 ) break;
         if (send(mysocket, mensagem, strlen(mensagem), 0) == -1){
             perror("send");
             exit(1);
         } 
+        if( strcmp(mensagem,"q") == 0 ) break;
         strcpy( mensagem, "" );
     }
    

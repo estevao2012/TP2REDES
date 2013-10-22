@@ -1,16 +1,19 @@
-all: server client
+all: Servidor Cliente
 
-server:
-	cd servidor && make
+Servidor:
+	cd server && make
+	mv server/servidor servidor
 
 executa_servidor:
-	cd servidor && ./servidor
+	./servidor
 
-client:
-	cd cliente && make
+Cliente:
+	cd client && make
+	mv client/cliente cliente
 	
-executa_client:
-	cd cliente && ./cliente
+executa_cliente:
+	./cliente
+
 comita:
 	git add .
 	git cia "$(TXTCOMIT)"
