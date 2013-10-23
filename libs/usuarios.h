@@ -6,6 +6,7 @@
 typedef struct {
       int socketId;
       char nome[MAXLOGIN]; 
+      int id;
 }usuario; 
  
 

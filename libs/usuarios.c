@@ -1,6 +1,5 @@
 void inicitLista(){
-	int i; 
-	
+	int i;  
 	for(i=0;i<64;i++){
 		listUsers[i] = NULL;
 	}	
@@ -10,7 +9,8 @@ void imprimeLista(){
 	int i; 
 	printf("LISTA USUARIOS\n");
 	for(i=0;i<64;i++){
-		printf("%d %s\n" , listUsers[i]->socketId , listUsers[i]->nome );
+		if( listUsers[i] != NULL)
+		printf("%d %s\n" , listUsers[i]->id , listUsers[i]->nome );
 	}
 }
 usuario* registra_user(int socketId , char nome[MAXLOGIN]){
@@ -23,6 +23,7 @@ usuario* registra_user(int socketId , char nome[MAXLOGIN]){
 	for(i=0;i<64;i++){
 		if( listUsers[i] == NULL){
 			listUsers[i] = novo;
+			novo->id = i;
 			break;
 		}
 	}
@@ -53,11 +54,11 @@ void *connection_handler(void *socket_desc){
         if(len == 0) break; 
         if(strcmp(buffer,"q") == 0) break;
         // printf("%d\n", numUsersAtivos );
-        printf("%d : %s disse ", User->socketId , User->nome ); 
+        printf("%d : %s disse ", User->id , User->nome ); 
         printf("%s\n", buffer ); 
     } 
     printf("%s saiu\n",User->nome);
-
+    listUsers[User->id] = NULL;
     numUsersAtivos--;
    	free(socket_desc);
      
