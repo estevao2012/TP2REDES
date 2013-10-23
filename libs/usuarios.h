@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mysocket.h"
+// #include "mysocket.h"
 
 typedef struct {
       int socketId;
-      char nome[MAXLOGIN]; 
+      char nome[50]; 
       int id;
 }usuario; 
  
@@ -13,6 +13,9 @@ typedef struct {
 int numUsersAtivos = 0;
 usuario* listUsers[64];
 
-usuario* registra_user(int socketId , char nome[MAXLOGIN]);
+void iniciaListaUsuarios();
+void imprimeLista();
+void qtsUsuariosAtivos();
+usuario* registra_user(int socketId , char nome[50]);
 
 #include "usuarios.c"

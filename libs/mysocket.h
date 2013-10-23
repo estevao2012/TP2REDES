@@ -9,6 +9,8 @@
 #define PORTNUM 2343
 #define IP "127.0.0.1"
 #define MAXRCVLEN 500
-#define MAXLOGIN 50
+#define MAXLOGIN 50 
+
+void *conexao_servidor(void *socket_desc);
 
 #include "mysocket.c"

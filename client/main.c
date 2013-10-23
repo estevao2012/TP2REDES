@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../libs/usuarios.h"
 #include "../libs/mysocket.h"
   
 int main(int argc, char *argv[])
@@ -24,8 +25,6 @@ int main(int argc, char *argv[])
     dest.sin_port = htons(port_recv);           
 
     if (connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr)) == -1) {
-        //printf("ERRO ip: %s",IP);
-        //printf(" port: %i\n",port_recv);
         perror("connect()");
         exit(1);
     } 

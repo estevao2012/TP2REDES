@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-#include "../libs/mysocket.h"
 #include "../libs/usuarios.h"
+#include "../libs/mysocket.h"
 
 
 int main(int argc, char *argv[])
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     int idThread;
     socklen_t socksize = sizeof(struct sockaddr_in);
     
-    inicitLista();
+    iniciaListaUsuarios();
     
     memset(&serv, 0, sizeof(serv));           /* zero the struct before filling the fields */
     serv.sin_family = AF_INET;                /* set the type of connection to TCP/IP */
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         new_sock = malloc(1);
         *new_sock = consocket;
 
-        if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) new_sock) < 0){
+        if( pthread_create( &sniffer_thread , NULL ,  conexao_servidor , (void*) new_sock) < 0){
             perror("could not create thread");
             return 1;
         }
