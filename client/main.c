@@ -14,9 +14,7 @@ int main(int argc, char *argv[])
     in_addr_t addressIp; 
     int numbytes, mysocket;
     struct sockaddr_in dest;
-    port_recv = PORTNUM;
-
-
+    port_recv = PORTNUM; 
 
     if ((mysocket = socket(AF_INET, SOCK_STREAM, 0)) == -1){ perror("socket()"); exit(1); }
 
@@ -30,34 +28,37 @@ int main(int argc, char *argv[])
         //printf(" port: %i\n",port_recv);
         perror("connect()");
         exit(1);
-    }
-    
+    } 
    
     //Recebe boas vindas
-    if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){
-        perror("recv()");
-        exit(1);
-    }
-    resposta[numbytes] = '\0';
-    printf("%s\n",resposta );
+    {
+        if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){
+            perror("recv()");
+            exit(1);
+        } 
+        resposta[numbytes] = '\0';
+        printf("%s\n",resposta );  
+    } 
 
-    scanf("%s",login);
+    fgets(login, sizeof(login) , stdin);
+    login[strlen(login)-1] = '\0';
 
     if (send(mysocket, login, strlen(login), 0) == -1){
         perror("send");
         exit(1);
     } 
 
-    while(1){
+    //Loop para enviar comandos para servidor
+    while(1){ 
+        printf("Deseja enviar uma mensagem?\n"); 
+        fgets(mensagem, sizeof(mensagem) , stdin);
+        mensagem[strlen(mensagem)-1] = '\0';
 
-        printf("Deseja enviar uma mensagem?\n");
-        scanf("%s", mensagem);
         if (send(mysocket, mensagem, strlen(mensagem), 0) == -1){
             perror("send");
             exit(1);
         } 
-        if( strcmp(mensagem,"q") == 0 ) break;
-        strcpy( mensagem, "" );
+        if( strcmp(mensagem,"q") == 0 ) break; 
     }
    
     close(mysocket);
