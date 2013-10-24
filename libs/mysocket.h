@@ -11,6 +11,7 @@
 #define MAXRCVLEN 500
 #define MAXLOGIN 50 
 
+void broadcast(char *msg);
 void *conexao_servidor(void *socket_desc);
 
 #include "mysocket.c"
