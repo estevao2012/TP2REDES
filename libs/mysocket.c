@@ -14,6 +14,7 @@ void *conexao_servidor(void *socket_desc){
    char login[MAXLOGIN+1];
    char buffer[MAXRCVLEN + 1];
    char boasvindas[] = "Bem vindo , por favor digite seu usuário!"; 
+   char novologin[] = "Usuário já logado , digite outro por favor."; 
    usuario *User;
 
    //Contando o novo usuario
@@ -24,6 +25,24 @@ void *conexao_servidor(void *socket_desc){
    send(consocket, boasvindas, MAXRCVLEN, 0); 
 
    len = recv(consocket,login,MAXLOGIN,0);  
+   printf("%s\n", login );
+
+   while( 1 ){       
+     if( usuario_valido(login) == 1 ) break;
+     else{ 
+        printf("%s\n",novologin );
+        send(consocket, novologin, MAXRCVLEN, 0);  
+        if(len = recv(consocket, login, MAXRCVLEN, 0) == -1){ perror("recv()");exit(1);}    
+     }
+
+   }
+
+   printf("User ok\n");
+
+   send(consocket, "ok", MAXRCVLEN, 0); 
+
+   // exit(0); 
+
    User = registra_user( consocket , login ); 
    sprintf(buffer, "%s conectou.\n", login); 
    broadcast( buffer );
@@ -50,20 +69,18 @@ void *conexao_servidor(void *socket_desc){
    	free(socket_desc);
      
    return 0;
-}
-
+} 
 
 void *conexao_usuario_escuta(void *socket_desc){
   int mysocket = *(int*)socket_desc;
   int numbytes;
-  char resposta[MAXRCVLEN + 1];
-
+  char resposta[MAXRCVLEN + 1]; 
 
   while(1){
       if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){perror("recv()");exit(1); } 
       resposta[numbytes] = '\0';
-      printf("%s\n",resposta );  
       if(strcmp(resposta,":q") == 0) break; 
+      printf("%s\n",resposta );  
   }
  
   // free(socket_desc); 
@@ -79,9 +96,7 @@ void *conexao_usuario_fala(void *socket_desc){
       printf("Deseja enviar uma mensagem?\n"); 
 
       fgets(mensagem, sizeof(mensagem) , stdin);
-      mensagem[strlen(mensagem)-1] = '\0';
-
-      // fflush(stdout);
+      mensagem[strlen(mensagem)-1] = '\0'; 
 
       if (send(mysocket, mensagem, strlen(mensagem), 0) == -1){perror("send");exit(1); } 
 

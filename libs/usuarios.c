@@ -35,4 +35,15 @@ usuario* registra_user(int socketId , char nome[50]){
 
 	return novo;
 }
+
+int usuario_valido( char nome[50] ){ 
+	int i; 
+	for(i=0;i<64;i++){
+		if( listUsers[i] != NULL)
+			if( strcmp( listUsers[i]->nome , nome ) == 0 )
+				return 0; 
+	}
+
+	return 1;
+}
  

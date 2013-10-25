@@ -13,5 +13,7 @@
 
 void broadcast(char *msg);
 void *conexao_servidor(void *socket_desc);
+void *conexao_usuario_escuta(void *socket_desc);
+void *conexao_usuario_fala(void *socket_desc);
 
 #include "mysocket.c"

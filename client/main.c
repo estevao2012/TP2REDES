@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     } 
    
     //Recebe boas vindas e solicita login
-    {
+    
         if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){ perror("recv()");exit(1);} 
       
         resposta[numbytes] = '\0';
@@ -38,7 +38,21 @@ int main(int argc, char *argv[])
         login[strlen(login)-1] = '\0';
 
         if (send(mysocket, login, strlen(login), 0) == -1){ perror("send");exit(1);} 
-    }
+
+        //Mensagem confirmação
+        while(1){  
+            if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){ perror("recv()");exit(1);} 
+            printf("%s\n",resposta );
+            if( strcmp( resposta, "ok") == 0 )break;
+            
+            fgets(login, sizeof(login) , stdin);
+            login[strlen(login)-1] = '\0';
+            if( strcmp( resposta, "ok") == 0 )break;
+ 
+            if (send(mysocket, login, strlen(login), 0) == -1){ perror("send");exit(1);} 
+
+        } 
+    printf("Usuário confirmado !\n");
 
     pthread_t fala,escuta;
     new_sock = malloc(1);
