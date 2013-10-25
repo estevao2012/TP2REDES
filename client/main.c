@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include "../libs/usuarios.h"
 #include "../libs/mysocket.h"
+#include "../libs/utils.h"
   
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,8 @@ int main(int argc, char *argv[])
         perror("connect()");
         exit(1);
     } 
+    limpa_tela();
+    gotoxy(0,0);
    
     //Recebe boas vindas e solicita login
     
@@ -42,17 +45,20 @@ int main(int argc, char *argv[])
         //Mensagem confirmação
         while(1){  
             if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){ perror("recv()");exit(1);} 
+            if( strcmp( resposta, "ok") == 0 ) break;
             printf("%s\n",resposta );
-            if( strcmp( resposta, "ok") == 0 )break;
             
             fgets(login, sizeof(login) , stdin);
-            login[strlen(login)-1] = '\0';
-            if( strcmp( resposta, "ok") == 0 )break;
+            login[strlen(login)-1] = '\0'; 
  
             if (send(mysocket, login, strlen(login), 0) == -1){ perror("send");exit(1);} 
 
         } 
+    // gotoxy(0 , 0);
     printf("Usuário confirmado !\n");
+    // sleep(1);
+    limpa_tela();
+    // gotoxy(0,0);
 
     pthread_t fala,escuta;
     new_sock = malloc(1);
