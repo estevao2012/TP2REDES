@@ -75,15 +75,15 @@ void *conexao_usuario_escuta(void *socket_desc){
   int mysocket = *(int*)socket_desc;
   int numbytes;
   char resposta[MAXRCVLEN + 1]; 
-  int posY = 0;
-  while(1){
- 
+  int posY = 1;
+  while(1){ 
       if ((numbytes = recv(mysocket, resposta, MAXRCVLEN, 0)) == -1){perror("recv()");exit(1); } 
       resposta[numbytes] = '\0';
       if(strcmp(resposta,":q") == 0) break;  
       printf("\033[%d;0f%s\033[K\n",posY,resposta );  
       printf("\033[1L");
-      printf("Deseja enviar uma mensagem? %i\n\33[1K\33[K\33[J",posY);   
+      printf("Deseja enviar uma mensagem? %i\n\33[J\33[1A\33[K",posY);  
+      printf("\33\67p"); 
       posY++;   
   }
  
@@ -97,10 +97,9 @@ void *conexao_usuario_fala(void *socket_desc){
   char mensagem[MAXRCVLEN + 1];
   int i=0;
   while(1){ 
-      // gotoxy(10,0); 
-
+      // gotoxy(10,0);
       fgets(mensagem, sizeof(mensagem) , stdin);
-      mensagem[strlen(mensagem)-1] = '\0'; 
+      mensagem[strlen(mensagem)-1] = '\0';  
 
       if (send(mysocket, mensagem, strlen(mensagem), 0) == -1){perror("send");exit(1); } 
 
