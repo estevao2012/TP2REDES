@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
-#include "../libs/usuarios.h"
+#include <pthread.h> 
 #include "../libs/mysocket.h"
 
 
 int main(int argc, char *argv[])
 {
-    char buffer[MAXRCVLEN + 1];
+    char buffer[MAXRBUFFER + 1];
     char login[MAXLOGIN + 1]; 
      
     struct sockaddr_in dest; /* socket info about the machine connecting to us */
