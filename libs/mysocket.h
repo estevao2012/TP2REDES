@@ -8,10 +8,11 @@
 #include "../libs/usuarios.h"
 
 #define PORTNUM 2343
-#define IP "127.0.0.1"
 #define MAXRCVLEN 500
 #define MAXRBUFFER 570
 #define MAXLOGIN 50 
+
+pthread_mutex_t mLogin; 
 
 void broadcast(char *msg);
 void *conexao_servidor(void *socket_desc);

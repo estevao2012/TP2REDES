@@ -18,19 +18,22 @@ void qtsUsuariosAtivos(){
 	printf("USUARIOS ATIVOS : %d\n", numUsersAtivos );
 }
 
-usuario* registra_user(int socketId , char nome[50]){
+usuario* registra_user(int socketId , char nome[50] , int id){
 	usuario* novo;
 	novo = (usuario*) malloc( sizeof(usuario) );
 	novo->socketId = socketId; 
 	strncpy(novo->nome, nome, 50); 
 	int i;
-
-	for(i=0;i<64;i++){
-		if( listUsers[i] == NULL){
-			listUsers[i] = novo;
-			novo->id = i;
-			break;
+	if ( id == -1){
+		for(i=0;i<64;i++){
+			if( listUsers[i] == NULL){
+				listUsers[i] = novo;
+				novo->id = i;
+				break;
+			}
 		}
+	}else{
+		listUsers[id] = novo;
 	}
 
 	return novo;

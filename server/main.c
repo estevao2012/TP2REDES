@@ -8,8 +8,7 @@
 int main(int argc, char *argv[])
 {
     char buffer[MAXRBUFFER + 1];
-    char login[MAXLOGIN + 1]; 
-     
+    char login[MAXLOGIN + 1];  
     struct sockaddr_in dest; /* socket info about the machine connecting to us */
     struct sockaddr_in serv; /* socket info about our server */
     int mysocket;            /* socket used to listen for incoming connections */
@@ -20,6 +19,7 @@ int main(int argc, char *argv[])
     socklen_t socksize = sizeof(struct sockaddr_in);
     
     iniciaListaUsuarios();
+    iniciaMutexs();
     
     memset(&serv, 0, sizeof(serv));           /* zero the struct before filling the fields */
     serv.sin_family = AF_INET;                /* set the type of connection to TCP/IP */
@@ -33,8 +33,7 @@ int main(int argc, char *argv[])
     listen(mysocket, 64); 
 
     while( (consocket = accept(mysocket, (struct sockaddr *)&dest, &socksize ) ) )
-    {
-        // printf("Connection accepted\n");
+    { 
          
         pthread_t sniffer_thread;
         new_sock = malloc(1);
@@ -48,6 +47,7 @@ int main(int argc, char *argv[])
          
         //Now join the thread , so that we dont terminate before the thread
         // pthread_join( sniffer_thread , NULL); 
+        pthread_detach(sniffer_thread);
     }
      
     if (consocket < 0){

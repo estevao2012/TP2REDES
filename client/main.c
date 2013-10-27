@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include "../libs/mysocket.h"
 #include "../libs/utils.h"
+
+#define IP "127.0.0.1"
   
 int main(int argc, char *argv[])
 {
@@ -48,8 +50,7 @@ int main(int argc, char *argv[])
         printf("%s\n",resposta );
 
         fgets(login, sizeof(login) , stdin);
-        login[strlen(login)-1] = '\0'; 
-        // printf("%s\n",login );
+        login[strlen(login)-1] = '\0';  
 
         if (send(mysocket, login, MAXLOGIN, 0) == -1){ perror("send");exit(1);} 
 
