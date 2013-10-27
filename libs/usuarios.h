@@ -14,7 +14,7 @@ usuario* listUsers[64];
 void iniciaListaUsuarios();
 void imprimeLista();
 void qtsUsuariosAtivos();
-usuario* registra_user(int socketId , char nome[50] , int id);
-int usuario_valido( char nome[50] );
+usuario* registra_user(int socketId , char nome[50] );
+int usuario_encontrado( char nome[50] );
 
 #include "usuarios.c"
