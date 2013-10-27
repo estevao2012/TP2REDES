@@ -38,9 +38,9 @@ int mensagem_direta( usuario *User ){
  
   to_Id = usuario_encontrado(login) ;
   if( to_Id == -1){
-    send(User->socketId , "Usuário não encontrado." , MAXRBUFFER, 0);      
+    send(User->socketId , "\33[31;49mUsuário não encontrado.\33[39;49m" , MAXRBUFFER, 0);      
   }else{
-    send(User->socketId , "Usuário encontrado , digite sua mensagem." , MAXRBUFFER, 0);   
+    send(User->socketId , "Digite sua mensagem." , MAXRBUFFER, 0);   
 
     len = recv(User->socketId,buffer,MAXRCVLEN,0);   
     buffer[len] = '\0';
@@ -51,8 +51,10 @@ int mensagem_direta( usuario *User ){
     printf("Mensagem privada\n");
     printf("MENSAGEM : %s\n",buffer ); 
     printf("Nome destino %s\n", listUsers[to_Id]->nome);
-    sprintf( padraoMensagem , "\33[1m\33[33;49m(PRIVATE)\33[39;49m\33[34;49m%s \33[39;49mdisse:\33[0m %s ", User->nome , buffer );
+    sprintf( padraoMensagem , "\33[1m\33[33;49m(PRIVATE)\33[39;49m\33[34;49m%s \33[39;49mdisse para \33[35;49m%s\33[39;49m:\33[0m %s ", User->nome , listUsers[to_Id]->nome , buffer );
+    
     send(listUsers[to_Id]->socketId , padraoMensagem , MAXRBUFFER, 0);    
+    send(User->socketId , padraoMensagem , MAXRBUFFER, 0);    
 
     printf("%s enviou mensagem para %s\n",User->nome , listUsers[to_Id]->nome );
   }
@@ -157,9 +159,11 @@ void *conexao_servidor(void *socket_desc){
       mensagem_direta( User ); 
     }
     else{
-      printf("\33[1m\33[34;49m%s \33[39;49mdisse:\33[0m %s\n", User->nome , buffer ); 
-      sprintf( padraoMensagem , "\33[1m\33[34;49m%s \33[39;49mdisse:\33[0m %s", User->nome , buffer );  
-      broadcast( padraoMensagem );          
+      if( strcmp( buffer , "") != 0 && strcmp( buffer , "\0") != 0){ 
+        printf("\33[1m\33[34;49m%s \33[39;49mdisse:\33[0m %s\n", User->nome , buffer ); 
+        sprintf( padraoMensagem , "\33[1m\33[34;49m%s \33[39;49mdisse:\33[0m %s", User->nome , buffer );  
+        broadcast( padraoMensagem );   
+      }       
     }
   }  
 
@@ -194,12 +198,12 @@ void *conexao_usuario_escuta(void *socket_desc){
     if(strcmp(resposta,":q") == 0)
       break;  
     else if( strcmp(resposta,"ok") == 0 ){}
-    else if(strcmp(resposta,"") == 0){}
+    else if(strcmp(resposta,"") == 0 ){}
     else{
-      printf("\033[%d;0f%s\033[K\n",posY,resposta );  
-      printf("\033[1L");
-      printf("---------------------------\n\33[J\33[1A\33[K");   
-      posY++;   
+      printf("%s\n----\n\33[J\33[1A",resposta );  
+      // printf("\033[1L");
+      // printf("");    
+      // posY++;   
     }
 
   } 
@@ -217,7 +221,7 @@ void *conexao_usuario_fala(void *socket_desc){
 
     fgets(mensagem, sizeof(mensagem) , stdin);
     mensagem[strlen(mensagem)-1] = '\0';   
-
+    printf("\33[1A\33[J");
     if (send(mysocket, mensagem, MAXRCVLEN, 0) == -1){perror("send");exit(1); } 
     if( strcmp(mensagem,":q") == 0 ) break; 
  

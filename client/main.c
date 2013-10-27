@@ -58,7 +58,8 @@ int main(int argc, char *argv[])
 
     printf("Usuário confirmado !\n");
     sleep(1);
-    limpa_tela(); 
+    limpa_tela();
+    gotoxy(0,0); 
 
     pthread_t fala,escuta;
     new_sock = malloc(1);
