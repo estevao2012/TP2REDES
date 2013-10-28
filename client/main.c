@@ -6,6 +6,8 @@
 #include "../libs/utils.h"
 
 #define IP "127.0.0.1"
+// #define IP "187.20.32.47"
+
   
 int main(int argc, char *argv[])
 {

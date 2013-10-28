@@ -7,7 +7,7 @@
 #include <netdb.h> 
 #include "../libs/usuarios.h"
 
-#define PORTNUM 2343
+#define PORTNUM 49152
 #define MAXRCVLEN 500
 #define MAXRBUFFER 570
 #define MAXLOGIN 50 
